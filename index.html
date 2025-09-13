@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Attendance Tracker</title>
+  <style>
+  /* Full-screen layout */
+body {
+  background: #f8fafd;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Full-width container */
+.container {
+  background: #fff;
+  padding: 32px 48px;
+  border-radius: 0;
+  box-shadow: none;
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Heading */
+h2 {
+  margin-bottom: 20px;
+  color: #0066cc;
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: 700;
+}
+
+/* Labels */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Inputs and selects */
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-size: 1em;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Unified button style */
+button[type="submit"],
+button#exportBtn {
+  width: 100%;
+  padding: 12px 0;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #0066cc, #0099ff);
+  color: #ffffff;
+  font-size: 1.1em;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 153, 255, 0.4);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"]:hover,
+button#exportBtn:hover {
+  background: linear-gradient(135deg, #0055aa, #007acc);
+  transform: scale(1.02);
+}
+
+/* Result box */
+.result {
+  margin-top: 20px;
+  background: #eaf6ff;
+  border-radius: 8px;
+  padding: 14px;
+  color: #222;
+  font-size: 1em;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px;
+  }
+}
+
+/* Action buttons for Edit and Delete */
+.action-btn {
+  padding: 8px 16px;
+  font-size: 0.95em;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Green Edit button */
+.edit-btn {
+  background-color: #28a745; /* Bootstrap green */
+  color: #fff;
+  box-shadow: 0 0 6px rgba(40, 167, 69, 0.4);
+}
+
+.edit-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Red Delete button */
+.delete-btn {
+  background-color: #dc3545; /* Bootstrap red */
+  color: #fff;
+  box-shadow: 0 0 6px rgba(220, 53, 69, 0.4);
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-size: 1em;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  transition: box-shadow 0.3s ease;
+}
+
+input:focus, select:focus {
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3); /* glow on focus */
+}
+
+#entryWrapper {
+  margin-top: 20px;
+  padding: 0 16px; /* left-right gap */
+}
+
+#deleteAllBtn {
+  width: 100%;
+  margin-top: 16px;
+  margin-bottom: 40px;
+  padding: 12px 0;
+  background: linear-gradient(135deg, #ff4d4d, #ff1a1a);
+  color: #fff;
+  font-size: 1.05em;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255, 26, 26, 0.4);
+  transition: background 0.3s, transform 0.2s;
+}
+
+#deleteAllBtn:hover {
+  background: linear-gradient(135deg, #e60000, #cc0000);
+  transform: scale(1.02);
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Attendance Tracker</h2>
+    <form id="attendanceForm">
+      <label for="date">Date:</label>
+      <input type="date" id="date" required>
+      
+      <label for="day">Day (Week):</label>
+      <input type="text" id="day" readonly>
+      
+      <label for="class">Class:</label>
+      <select id="class" required>
+        <option value="">Select Class</option>
+        <option value="1">Class 1</option>
+        <option value="2">Class 2</option>
+        <option value="3">Class 3</option>
+        <option value="4">Class 4</option>
+        <option value="5">Class 5</option>
+        <option value="6">Class 6</option>
+        <option value="7">Class 7</option>
+        <option value="8">Class 8</option>
+        <option value="9">Class 9</option>
+        <option value="10">Class 10</option>
+        <option value="11">Class 11</option>
+        <option value="12">Class 12</option>
+        <option value="13">Class 13</option>
+        <option value="14">Class 14</option>
+        <option value="15">Class 15</option>
+        <option value="16">Class 16</option>
+        <option value="17">Class 17</option>
+        <option value="18">Class 18</option>
+        <option value="19">Class 19</option>
+        <option value="20">Class 20</option>
+        <option value="21">Class 21</option>
+        <option value="22">Class 22</option>
+        <option value="23">Class 23</option>
+        <option value="24">Class 24</option>
+        <option value="25">Class 25</option>
+        <option value="26">Class 26</option>
+        <option value="27">Class 27</option>
+        <option value="28">Class 28</option>
+        <option value="29">Class 29</option>
+        <option value="30">Class 30</option>
+        <option value="31">Class 31</option>
+        <option value="32">Class 32</option>
+        <option value="33">Class 33</option>
+        <option value="34">Class 34</option>
+        <option value="35">Class 35</option>
+        <option value="36">Class 36</option>
+        <option value="37">Class 37</option>
+        <option value="38">Class 38</option>
+        <option value="39">Class 39</option>
+        <option value="40">Class 40</option>
+        <option value="41">Class 41</option>
+        <option value="42">Class 42</option>
+        <option value="43">Class 43</option>
+        <option value="44">Class 44</option>
+        <option value="45">Class 45</option>
+        <option value="46">Class 46</option>
+        <option value="47">Class 47</option>
+        <option value="48">Class 48</option>
+        <option value="49">Class 49</option>
+        <option value="50">Class 50</option>
+        <option value="51">Class 51</option>
+        <option value="52">Class 52</option>
+        <option value="53">Class 53</option>
+        <option value="54">Class 54</option>
+        <option value="55">Class 55</option>
+        <option value="56">Class 56</option>
+        <option value="57">Class 57</option>
+        <option value="58">Class 58</option>
+        <option value="59">Class 59</option>
+        <option value="60">Class 60</option>
+        <option value="61">Class 61</option>
+        <option value="62">Class 62</option>
+        <option value="63">Class 63</option>
+        <option value="64">Class 64</option>
+        <option value="65">Class 65</option>
+        <option value="66">Class 66</option>
+        <option value="67">Class 67</option>
+        <option value="68">Class 68</option>
+        <option value="69">Class 69</option>
+        <option value="70">Class 70</option>
+        <option value="71">Class 71</option>
+        <option value="72">Class 72</option>
+        <option value="73">Class 73</option>
+        <option value="74">Class 74</option>
+        <option value="75">Class 75</option>
+        <option value="76">Class 76</option>
+        <option value="77">Class 77</option>
+        <option value="78">Class 78</option>
+        <option value="79">Class 79</option>
+        <option value="80">Class 80</option>
+        <option value="81">Class 81</option>
+        <option value="82">Class 82</option>
+        <option value="83">Class 83</option>
+        <option value="84">Class 84</option>
+        <option value="85">Class 85</option>
+        <option value="86">Class 86</option>
+        <option value="87">Class 87</option>
+        <option value="88">Class 88</option>
+        <option value="89">Class 89</option>
+        <option value="90">Class 90</option>
+      </select>
+      
+      <label for="status">Status:</label>
+      <select id="status" required>
+        <option value="">Select Status</option>
+        <option value="Completed">Completed</option>
+        <option value="Absent">Absent</option>
+      
+      </select>
+      
+      <button type="submit">Save Attendance</button>
+      <button type="button" id="exportBtn" >Export to PDF</button>
+
+    </form>
+    <div id="result" class="result" style="display:none"></div>
+  </div>
+<div id="entryWrapper">
+  <div id="result"></div>
+  <button type="button" id="deleteAllBtn">🗑️ Delete All Entries</button>
+</div>
+
+
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+  const dateInput = document.getElementById('date');
+  const dayInput = document.getElementById('day');
+  const form = document.getElementById('attendanceForm');
+  const resultDiv = document.getElementById('result');
+  const exportBtn = document.getElementById('exportBtn');
+
+  let editIndex = null;
+
+  // Load entries on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedEntries = JSON.parse(localStorage.getItem('attendanceData')) || [];
+    renderEntries(savedEntries);
+
+    // Attach export button listener
+    exportBtn.addEventListener('click', exportToPDF);
+  });
+
+  // Auto-fill day from date
+  dateInput.addEventListener('change', () => {
+    if (dateInput.value) {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const d = new Date(dateInput.value);
+      dayInput.value = days[d.getDay()];
+    } else {
+      dayInput.value = '';
+    }
+  });
+
+  // Handle form submission
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const date = dateInput.value;
+    const day = dayInput.value;
+    const classVal = document.getElementById('class').value;
+    const status = document.getElementById('status').value;
+
+    if (date && day && classVal && status) {
+      const newEntry = { date, day, classVal, status };
+      let entries = JSON.parse(localStorage.getItem('attendanceData')) || [];
+
+      if (editIndex !== null) {
+        entries[editIndex] = newEntry;
+        editIndex = null;
+      } else {
+        entries.push(newEntry);
+      }
+
+      localStorage.setItem('attendanceData', JSON.stringify(entries));
+      renderEntries(entries);
+      form.reset();
+      dayInput.value = '';
+    }
+  });
+
+
+  document.getElementById('deleteAllBtn').addEventListener('click', () => {
+  const confirmClear = confirm("⚠️ Are you sure you want to delete ALL attendance entries?");
+  if (confirmClear) {
+    localStorage.removeItem('attendanceData');
+    renderEntries([]);
+  }
+});
+
+
+  // Render entries as styled boxes
+  function renderEntries(entries) {
+    resultDiv.innerHTML = '';
+    resultDiv.style.display = "block";
+
+    entries.forEach((entry, index) => {
+      const box = document.createElement('div');
+      box.style.background = '#ffffff';
+      box.style.border = '1px solid #cce6ff';
+      box.style.borderRadius = '8px';
+      box.style.padding = '12px 16px';
+      box.style.marginBottom = '12px';
+      box.style.boxShadow = '0 1px 6px rgba(0,0,0,0.05)';
+
+      box.innerHTML = `
+  <strong>Date:</strong> ${entry.date}<br>
+  <strong>Day:</strong> ${entry.day}<br>
+  <strong>Class:</strong> ${entry.classVal}<br>
+  <strong>Status:</strong> ${entry.status}<br><br>
+  <div style="display:flex; gap:10px;">
+    <button type="button" class="action-btn edit-btn" onclick="editEntry(${index})">Edit</button>
+    <button type="button" class="action-btn delete-btn" onclick="deleteEntry(${index})">Delete</button>
+  </div>
+`;
+
+      resultDiv.appendChild(box);
+    });
+  }
+
+  // Edit entry
+  window.editEntry = function(index) {
+    const entries = JSON.parse(localStorage.getItem('attendanceData')) || [];
+    const entry = entries[index];
+    dateInput.value = entry.date;
+    const d = new Date(entry.date);
+    dayInput.value = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][d.getDay()];
+    document.getElementById('class').value = entry.classVal;
+    document.getElementById('status').value = entry.status;
+    editIndex = index;
+  }
+
+  // Delete entry with confirmation
+  window.deleteEntry = function(index) {
+    const confirmDelete = confirm("Are you sure you want to delete this entry?");
+    if (confirmDelete) {
+      let entries = JSON.parse(localStorage.getItem('attendanceData')) || [];
+      entries.splice(index, 1);
+      localStorage.setItem('attendanceData', JSON.stringify(entries));
+      renderEntries(entries);
+    }
+  }
+
+
+  
+  // Export entries to PDF as a table
+  function exportToPDF() {
+    const entries = JSON.parse(localStorage.getItem('attendanceData')) || [];
+    if (entries.length === 0) {
+      alert("No attendance data to export.");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const headers = [["Sl Number", "Date", "Day", "Class", "Status"]];
+    const rows = entries.map((entry, i) => [
+      i + 1,
+      entry.date,
+      entry.day,
+      entry.classVal,
+      entry.status
+    ]);
+
+    doc.autoTable({
+      head: headers,
+      body: rows,
+      startY: 20,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [0, 102, 204],
+        textColor: 255,
+        fontStyle: 'bold'
+      },
+      styles: {
+        fontSize: 10,
+        cellPadding: 4
+      },
+      margin: { top: 20 }
+    });
+
+    doc.save("Attendance_Report.pdf");
+  }
+</script>
+
+
+
+
+
+
+
+</body>
+</html>
